@@ -16,4 +16,6 @@ public interface IService {
 	public void deleteOneStudent(int id);
 
 	List<Student> findByName(String name);
+
+	Student updateStudent(Student student);
 }

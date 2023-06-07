@@ -11,5 +11,4 @@ public interface IDao {
 	Optional<Student> findById(int id);
 	public Student deleteById(int id);
 	public List<Student> findByName(String name);
-
 }
