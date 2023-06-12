@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.wileyedge.studentwebservice.dao.IDao;
+import com.wileyedge.studentwebservice.exception.RequiredFieldsMissingException;
 import com.wileyedge.studentwebservice.exception.StudentNotFoundException;
 import com.wileyedge.studentwebservice.model.Student;
 
@@ -37,9 +38,18 @@ public class UserService implements IService {
 
 	@Override
 	public Student save(Student student) {
-		Student stu = dao.save(student);
-		return stu;
+	    String name = student.getName();
+	    Integer age = student.getAge();
+	    String mob = student.getMob();
+
+	    if (name != null && !name.isBlank() && age != null && age >=15 && age<60 && mob != null && !mob.isBlank()) {
+	        return dao.save(student);
+	    } else {
+	        throw new RequiredFieldsMissingException("One or more required fields are missing or do not meet the specified format pattern or condition.");
+	    }
 	}
+
+
 
 	@Override
 	public List<Student> findByName(String name){

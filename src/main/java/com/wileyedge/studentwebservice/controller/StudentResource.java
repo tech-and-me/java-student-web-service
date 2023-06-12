@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wileyedge.studentwebservice.exception.StudentAlreadyExistedException;
 import com.wileyedge.studentwebservice.exception.StudentNotFoundException;
 import com.wileyedge.studentwebservice.model.Student;
 import com.wileyedge.studentwebservice.service.IService;
@@ -51,8 +52,15 @@ public class StudentResource {
 	
 	@PostMapping(path = "/students")
 	public Student createStudent(@RequestBody Student student) {
-		Student stu = service.save(student);
-		return stu;
+		//Check if student with the same ID already exists
+		Student existingStudent = null;
+		existingStudent = service.retrieveOne(student.getStuid());
+		if(existingStudent != null) {
+			throw new StudentAlreadyExistedException("Student already existed in our record. Please try update student details instead.");
+		}else {
+			Student stu = service.save(student);
+			return stu;
+		}
 	}
 	
 	@DeleteMapping(path = "/students/{id}")

@@ -25,6 +25,18 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		ExceptionResponse exResponse = new ExceptionResponse(new Date(),ex.getMessage(),"Student with specified id/name is/are not in the records");
 		return new ResponseEntity(exResponse , HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(StudentAlreadyExistedException.class)
+    public final ResponseEntity<Object> handleStudentAlreadyExistedException(StudentAlreadyExistedException ex, WebRequest req) {
+        ExceptionResponse exResponse = new ExceptionResponse(new Date(), ex.getMessage(), "Student with specified id already exists");
+        return new ResponseEntity(exResponse, HttpStatus.BAD_REQUEST);
+    }
+	
+	@ExceptionHandler(RequiredFieldsMissingException.class)
+    public final ResponseEntity<Object> handleRequiredFieldsMissingException(RequiredFieldsMissingException ex, WebRequest req) {
+        ExceptionResponse exResponse = new ExceptionResponse(new Date(), ex.getMessage(), "Required fields are missing.");
+        return new ResponseEntity(exResponse, HttpStatus.BAD_REQUEST);
+    }
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
